@@ -57,7 +57,9 @@ export default function About() {
               projects—building small apps or experimenting with new tech like
               AI tools and modern libraries.
             </p>
-            <button className="button-outline">Download CV</button>
+            <a href="/cv.pdf" download="Rhyme_Rubayet_CV.pdf">
+              <button className="button-outline">Download CV</button>
+            </a>
           </div>
         </div>
       </div>
