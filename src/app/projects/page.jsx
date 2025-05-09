@@ -38,9 +38,8 @@ export default function projects() {
                 <Image
                   src={project.image}
                   alt={project.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className={`transition-transform duration-300 transform ${
+                  fill
+                  className={`object-cover transition-transform duration-300 transform ${
                     hoveredProject === project.id ? "scale-105" : "scale-100"
                   }`}
                 />

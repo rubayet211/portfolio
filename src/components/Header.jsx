@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image"; // Added Image import
 import { usePathname } from "next/navigation";
-import Logo from "./Logo";
 import { Menu, X } from "lucide-react";
 
 export default function Header() {
@@ -46,7 +46,7 @@ export default function Header() {
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between w-full md:hidden">
           <Link href="/" className="flex items-center">
-            <Logo />
+            <Image src="/logo.png" alt="Logo" width={40} height={40} />
           </Link>
           <button
             onClick={toggleMenu}
@@ -62,7 +62,9 @@ export default function Header() {
         </div>
         <nav className="hidden md:flex items-center justify-between flex-1">
           <div className="mx-6">
-            <Logo />
+            <Link href="/">
+              <Image src="/logo.png" alt="Logo" width={40} height={40} />
+            </Link>
           </div>
           <div className="flex items-center space-x-6">
             {menuItems.map((item) => (
@@ -88,7 +90,9 @@ export default function Header() {
           } z-40 flex items-center justify-center`}
         >
           <nav className="flex flex-col items-center space-y-6">
-            <Logo />
+            <Link href="/" onClick={() => setIsMenuOpen(false)}>
+              <Image src="/logo.png" alt="Logo" width={50} height={50} />
+            </Link>
             {menuItems.map((item) => (
               <Link
                 key={item.path}
