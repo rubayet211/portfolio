@@ -19,7 +19,7 @@ export default function ClientLayout({ children }) {
                 {children}
             </main>
             <Footer />
-            <ScrollArrow />
+            {pathname !== '/contact' && <ScrollArrow />}
         </body>
     );
 }
