@@ -11,17 +11,17 @@ export default function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           <div className="flex justify-center mb-8 md:mb-0">
-            <div className="relative w-80 h-80 border border-white/10 rounded-md p-4">
+            <div className="relative w-full max-w-sm aspect-square sm:w-80 sm:h-80 border border-white/10 rounded-md p-4">
               <div className="w-full h-full flex items-center justify-center">
                 <Image
                   src="/profile.png"
                   alt="Profile picture"
-                  width={512}
-                  height={512}
-                  className="object-cover"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 320px"
+                  className="object-cover rounded-md"
                 />
               </div>
-              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="absolute inset-0 bg-black/10 rounded-md"></div>
             </div>
           </div>
 

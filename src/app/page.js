@@ -11,7 +11,7 @@ export default function Home() {
             Rhyme Rubayet
           </h1>
           <h2 className="font-sans text-xl md:text-2xl tracking-widest text-white/80 mb-12">
-            SOFTWARE ENGINNER + WEB DEVELOPER
+            SOFTWARE ENGINEER + WEB DEVELOPER
           </h2>
           <Link href="/about" className="inline-flex items-center space-x-2 button-outline">
             <span>Explore</span>

@@ -35,7 +35,7 @@ export default function service() {
             {skills.map((skill, index) => (
               <div
                 key={index}
-                className="bg-secondary/30 border border-white/10 rounded-lg p-4 sm:p-6 text-center hover:border-gold/30 transition-all hover:bg-secondary/50"
+                className="bg-secondary/30 border border-white/10 rounded-lg p-4 sm:p-6 text-center hover:border-accent/30 transition-all hover:bg-secondary/50"
               >
                 <span className="text-sm sm:text-base">{skill}</span>
               </div>

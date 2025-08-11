@@ -50,7 +50,7 @@ export default function Header() {
           </Link>
           <button
             onClick={toggleMenu}
-            className="text-white focus:outline-none z-50"
+            className="text-white focus:outline-none z-50 p-2 -mr-2"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
@@ -87,7 +87,7 @@ export default function Header() {
         <div
           className={`fixed inset-0 bg-background/95 backdrop-blur-md transition-all duration-300 ease-in-out md:hidden ${
             isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } z-40 flex items-center justify-center`}
+          } z-[60] flex items-center justify-center`}
         >
           <nav className="flex flex-col items-center space-y-6">
             <Link href="/" onClick={() => setIsMenuOpen(false)}>
