@@ -5,6 +5,7 @@ import ClientLayout from "./clientLayout";
 export const metadata = {
   title: "Rhyme Rubayet",
   description: "portfolio",
+  viewport: "width=device-width, initial-scale=1",
 };
 
 const inter = Inter({

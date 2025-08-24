@@ -13,7 +13,7 @@ const ScrollArrow = ({ position = "center" }) => {
     >
       <button
         onClick={navigateToNextPage}
-        className="animate-bounce bg-secondary/50 p-2 rounded-full transition-all duration-300 hover:bg-accent/50"
+        className="animate-bounce bg-secondary/50 p-3 rounded-full transition-all duration-300 hover:bg-accent/50 min-w-[44px] min-h-[44px] flex items-center justify-center"
         aria-label="Scroll to next page"
       >
         <ArrowDown className="h-6 w-6" />

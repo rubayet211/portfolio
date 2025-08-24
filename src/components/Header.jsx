@@ -50,7 +50,7 @@ export default function Header() {
           </Link>
           <button
             onClick={toggleMenu}
-            className="text-white focus:outline-none z-50 p-2 -mr-2"
+            className="text-white focus:outline-none z-50 p-2 -mr-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (

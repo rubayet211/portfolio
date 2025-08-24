@@ -52,18 +52,18 @@ export default function Contact() {
   };
 
   return (
-    <div className="flex flex-1 pb-8 pt-20 px-8">
+    <div className="flex flex-1 pb-6 pt-16 px-4 sm:px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-medium mb-8 text-center">
+        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium mb-6 sm:mb-8 text-center">
           Contact
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-serif mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif mb-4 sm:mb-6">
               Get in Touch
             </h2>
-            <p className="text-white/70 mb-8">
+            <p className="text-white/70 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
               I'm always open to discussing new projects, creative ideas or
               opportunities to be part of your vision.
             </p>
@@ -75,7 +75,7 @@ export default function Contact() {
                   <h3 className="font-medium">Email</h3>
                   <button
                     onClick={copyEmail}
-                    className="flex items-center group"
+                    className="flex items-center group py-2 pr-2 min-h-[44px]"
                   >
                     <span className="text-white/70 group-hover:text-accent transition-colors">
                       rubayet211@gmail.com
@@ -92,9 +92,9 @@ export default function Contact() {
               </div>
             </div>
           </div>
-          <div className="bg-secondary/30 p-6 rounded-lg">
-            <h2 className="text-2xl font-serif mb-4">Send a Message</h2>
-            <form ref={form} className="space-y-3" onSubmit={sendEmail}>
+          <div className="bg-secondary/30 p-4 sm:p-6 rounded-lg">
+            <h2 className="text-xl sm:text-2xl font-serif mb-4">Send a Message</h2>
+            <form ref={form} className="space-y-4" onSubmit={sendEmail}>
               <div>
                 <label htmlFor="from_name" className="block mb-2 text-sm">
                   Your Name
@@ -103,7 +103,7 @@ export default function Contact() {
                   type="text"
                   id="from_name"
                   name="from_name"
-                  className="w-full px-4 py-2 bg-background border border-border rounded-md"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-background border border-border rounded-md text-sm sm:text-base min-h-[44px]"
                   placeholder="John Doe"
                   required
                 />
@@ -117,7 +117,7 @@ export default function Contact() {
                   type="email"
                   id="from_email"
                   name="from_email"
-                  className="w-full px-4 py-2 bg-background border border-border rounded-md"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-background border border-border rounded-md text-sm sm:text-base min-h-[44px]"
                   placeholder="you@example.com"
                   required
                 />
@@ -131,7 +131,7 @@ export default function Contact() {
                   type="text"
                   id="subject"
                   name="subject"
-                  className="w-full px-4 py-2 bg-background border border-border rounded-md"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-background border border-border rounded-md text-sm sm:text-base min-h-[44px]"
                   placeholder="Project Inquiry"
                   required
                 />
@@ -144,8 +144,8 @@ export default function Contact() {
                 <textarea
                   id="message"
                   name="message"
-                  rows={3}
-                  className="w-full px-4 py-2 bg-background border border-border rounded-md"
+                  rows={4}
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-background border border-border rounded-md text-sm sm:text-base min-h-[44px]"
                   placeholder="How can I help you?"
                   required
                 ></textarea>
@@ -166,7 +166,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSending}
-                className="w-full px-6 py-3 bg-accent text-white rounded-md hover:bg-accent/80 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full px-6 py-3.5 bg-accent text-white rounded-md hover:bg-accent/80 transition-colors disabled:opacity-70 disabled:cursor-not-allowed text-sm sm:text-base font-medium min-h-[44px]"
               >
                 {isSending ? "Sending..." : "Send Message"}
               </button>

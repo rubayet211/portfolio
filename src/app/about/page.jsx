@@ -3,15 +3,15 @@ import Image from "next/image";
 
 export default function About() {
   return (
-    <div className="flex-1 flex py-20 px-8">
+    <div className="flex-1 flex py-16 px-4 sm:px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-medium mb-8 text-center">
+        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium mb-6 sm:mb-8 text-center">
           About Me
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-          <div className="flex justify-center mb-8 md:mb-0">
-            <div className="relative w-full max-w-sm aspect-square sm:w-80 sm:h-80 border border-white/10 rounded-md p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 items-start">
+          <div className="flex justify-center mb-6 sm:mb-8 md:mb-0">
+            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 border border-white/10 rounded-md p-3 sm:p-4 mx-auto">
               <div className="w-full h-full flex items-center justify-center">
                 <Image
                   src="/profile.png"
@@ -26,7 +26,7 @@ export default function About() {
           </div>
 
           <div>
-            <p className="text-white/80 mb-4 leading-relaxed">
+            <p className="text-white/80 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
               I’m Rhyme Rubayet, a software engineer & web developer with a BSc
               in Computer Science and Engineering from AIUB. I bring over 2
               years of experience working with technologies like Nextjs,
@@ -36,7 +36,7 @@ export default function About() {
               as a Full-stack Web Developer, building on my existing skills.
             </p>
 
-            <p className="text-white/80 mb-4 leading-relaxed">
+            <p className="text-white/80 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
               I approach every project with a commitment to writing clean,
               maintainable code that emphasizes efficiency and scalability. I
               enjoy breaking down complex challenges into smaller, manageable
@@ -45,20 +45,20 @@ export default function About() {
               engineers, and improving through feedback.
             </p>
 
-            <p className="text-white/80 mb-4 leading-relaxed">
+            <p className="text-white/80 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
               I’m passionate about using technology to solve real-world problems
               and enhance people’s lives. I believe in creating innovative,
               user-centric products that are functional, reliable, and
               thoughtfully crafted.
             </p>
 
-            <p className="text-white/80 mb-6 leading-relaxed">
+            <p className="text-white/80 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
               When I’m not coding for work, I love working on personal
               projects—building small apps or experimenting with new tech like
               AI tools and modern libraries.
             </p>
             <a href="/cv.pdf" download="Rhyme_Rubayet_CV.pdf">
-              <button className="button-outline">Download CV</button>
+              <button className="button-outline text-sm sm:text-base">Download CV</button>
             </a>
           </div>
         </div>
