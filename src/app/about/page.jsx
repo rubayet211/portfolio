@@ -1,67 +1,82 @@
-import Logo from "@/components/Logo";
 import Image from "next/image";
+import { Download } from "lucide-react";
+import { siteContent } from "@/content/site";
+import { buildPageMetadata } from "@/lib/metadata";
 
-export default function About() {
+export const metadata = buildPageMetadata({
+  title: "About",
+  description:
+    "Learn more about Rhyme Rubayet, a software engineer focused on maintainable full-stack product delivery and polished web experiences.",
+  path: "/about",
+});
+
+export default function AboutPage() {
   return (
-    <div className="flex-1 flex py-16 px-4 sm:px-6 md:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium mb-6 sm:mb-8 text-center">
-          About Me
-        </h1>
+    <div className="page-shell">
+      <div className="container-shell">
+        <section className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+          <div className="surface-card page-reveal p-6 sm:p-8">
+            <span className="eyebrow">About</span>
+            <h1 className="section-title mt-4 text-left">A practical engineer with a product mindset.</h1>
+            <p className="section-copy mt-5">{siteContent.about.intro}</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 items-start">
-          <div className="flex justify-center mb-6 sm:mb-8 md:mb-0">
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 border border-white/10 rounded-md p-3 sm:p-4 mx-auto">
-              <div className="w-full h-full flex items-center justify-center">
-                <Image
-                  src="/profile.png"
-                  alt="Profile picture"
-                  fill
-                  sizes="(max-width: 640px) 100vw, 320px"
-                  className="object-cover rounded-md"
-                />
-              </div>
-              <div className="absolute inset-0 bg-black/10 rounded-md"></div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {siteContent.about.highlights.map((item) => (
+                <div key={item.label} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-sm font-semibold text-white">{item.label}</p>
+                  <p className="mt-2 text-sm leading-7 text-white/70">{item.value}</p>
+                </div>
+              ))}
             </div>
-          </div>
 
-          <div>
-            <p className="text-white/80 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
-              I’m Rhyme Rubayet, a software engineer & web developer with a BSc
-              in Computer Science and Engineering from AIUB. I bring over 2
-              years of experience working with technologies like Nextjs,
-              Reactjs, Nestjs, Flutter, and AWS, which I’ve applied to projects
-              in ecommerce, tutoring service website, and SaaS solution.
-              Currently, I work remotely for ComboKid, a Hong Kong-based company
-              as a Full-stack Web Developer, building on my existing skills.
-            </p>
-
-            <p className="text-white/80 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
-              I approach every project with a commitment to writing clean,
-              maintainable code that emphasizes efficiency and scalability. I
-              enjoy breaking down complex challenges into smaller, manageable
-              tasks, solving them systematically to ensure quality. I thrive in
-              collaborative environments—sharing ideas, learning from senior
-              engineers, and improving through feedback.
-            </p>
-
-            <p className="text-white/80 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
-              I’m passionate about using technology to solve real-world problems
-              and enhance people’s lives. I believe in creating innovative,
-              user-centric products that are functional, reliable, and
-              thoughtfully crafted.
-            </p>
-
-            <p className="text-white/80 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
-              When I’m not coding for work, I love working on personal
-              projects—building small apps or experimenting with new tech like
-              AI tools and modern libraries.
-            </p>
-            <a href="/cv.pdf" download="Rhyme_Rubayet_CV.pdf">
-              <button className="button-outline text-sm sm:text-base">Download CV</button>
+            <a
+              href={siteContent.person.resumePath}
+              download={`${siteContent.person.name.replaceAll(" ", "_")}_CV.pdf`}
+              className="secondary-button mt-8 inline-flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Download CV
             </a>
           </div>
-        </div>
+
+          <div className="space-y-6">
+            <div className="surface-card page-reveal p-4 sm:p-5">
+              <div className="relative aspect-[4/4.5] overflow-hidden rounded-[2rem] border border-white/10">
+                <Image
+                  src="/profile.png"
+                  alt={`Portrait of ${siteContent.person.name}`}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(9,12,16,0.24))]" />
+              </div>
+            </div>
+
+            <article className="surface-card p-6 sm:p-8">
+              <h2 className="text-3xl font-semibold text-white">How I work</h2>
+              <div className="mt-5 space-y-4">
+                {siteContent.about.paragraphs.map((paragraph) => (
+                  <p key={paragraph} className="text-sm leading-8 text-white/[0.72] sm:text-base">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              <div className="mt-8 grid gap-4">
+                {siteContent.about.principles.map((principle) => (
+                  <div
+                    key={principle}
+                    className="rounded-3xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/[0.72]"
+                  >
+                    {principle}
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -1,25 +1,25 @@
 "use client";
+
 import { ArrowDown } from "lucide-react";
-import { usePathname } from "next/navigation";
 import { useScrollNavigation } from "@/hooks/useScrollNavigation";
 
-const ScrollArrow = ({ position = "center" }) => {
-  const { navigateToNextPage } = useScrollNavigation();
-  const pathname = usePathname();
+export default function ScrollArrow() {
+  const { canNavigateForward, isEnabled, navigateToNextPage } = useScrollNavigation();
+
+  if (!isEnabled || !canNavigateForward) {
+    return null;
+  }
 
   return (
-    <div
-      className="fixed bottom-12 left-1/2 transform -translate-x-1/2 z-10"
-    >
+    <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 hidden justify-center lg:flex">
       <button
+        type="button"
         onClick={navigateToNextPage}
-        className="animate-bounce bg-secondary/50 p-3 rounded-full transition-all duration-300 hover:bg-accent/50 min-w-[44px] min-h-[44px] flex items-center justify-center"
-        aria-label="Scroll to next page"
+        className="scroll-arrow-button motion-safe-bounce pointer-events-auto"
+        aria-label="Go to the next page"
       >
-        <ArrowDown className="h-6 w-6" />
+        <ArrowDown className="h-5 w-5" />
       </button>
     </div>
   );
-};
-
-export default ScrollArrow;
+}

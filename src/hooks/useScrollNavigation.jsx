@@ -1,168 +1,119 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
 
-const ROUTES = ["/", "/about", "/skill", "/projects", "/contact"];
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  canEnableScrollNavigation,
+  getAdjacentRoute,
+  isAtScrollBoundary,
+} from "@/lib/scrollNavigation";
 
-export const useScrollNavigation = () => {
+const NAVIGATION_COOLDOWN_MS = 900;
+
+export function useScrollNavigation() {
   const router = useRouter();
   const pathname = usePathname();
-  const [isNavigating, setIsNavigating] = useState(false);
-  const [lastScrollTime, setLastScrollTime] = useState(0);
-  const [touchStartY, setTouchStartY] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const scrollTimeout = useRef(null);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const cooldownRef = useRef(0);
+  const navigatingRef = useRef(false);
+  const releaseTimeoutRef = useRef(null);
 
   useEffect(() => {
-    const checkIfMobile = () => {
-      const isTouchDevice =
-        "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      const isSmallScreen = window.innerWidth <= 768;
-      setIsMobile(isTouchDevice && isSmallScreen);
+    const hoverMediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reducedMotionMediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const updateEnabledState = () => {
+      setIsEnabled(
+        canEnableScrollNavigation({
+          canHover: hoverMediaQuery.matches,
+          reducedMotion: reducedMotionMediaQuery.matches,
+        })
+      );
     };
 
-    checkIfMobile();
-    window.addEventListener("resize", checkIfMobile);
+    updateEnabledState();
+    hoverMediaQuery.addEventListener("change", updateEnabledState);
+    reducedMotionMediaQuery.addEventListener("change", updateEnabledState);
 
     return () => {
-      window.removeEventListener("resize", checkIfMobile);
+      hoverMediaQuery.removeEventListener("change", updateEnabledState);
+      reducedMotionMediaQuery.removeEventListener("change", updateEnabledState);
     };
   }, []);
 
-  const shouldNavigate = (direction) => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-    const atTop = scrollTop <= 10;
-    return (direction === "down" && atBottom) || (direction === "up" && atTop);
+  useEffect(() => {
+    return () => {
+      if (releaseTimeoutRef.current) {
+        window.clearTimeout(releaseTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const attemptNavigation = (direction) => {
+    const nextRoute = getAdjacentRoute(pathname, direction);
+
+    if (!nextRoute) {
+      return false;
+    }
+
+    const now = Date.now();
+
+    if (navigatingRef.current || now - cooldownRef.current < NAVIGATION_COOLDOWN_MS) {
+      return false;
+    }
+
+    navigatingRef.current = true;
+    cooldownRef.current = now;
+    router.push(nextRoute);
+
+    if (releaseTimeoutRef.current) {
+      window.clearTimeout(releaseTimeoutRef.current);
+    }
+
+    releaseTimeoutRef.current = window.setTimeout(() => {
+      navigatingRef.current = false;
+    }, 420);
+
+    return true;
   };
 
   useEffect(() => {
-    if (isMobile) return;
+    if (!isEnabled) {
+      return undefined;
+    }
+
     const handleWheel = (event) => {
-      const now = Date.now();
-      if (now - lastScrollTime < 1000 || isNavigating) {
+      if (Math.abs(event.deltaY) < 28) {
         return;
       }
-
-      const currentIndex = ROUTES.indexOf(pathname);
-      if (currentIndex === -1) return;
 
       const direction = event.deltaY > 0 ? "down" : "up";
 
-      // Only navigate if we're at the edge of the page
-      if (shouldNavigate(direction)) {
-        setLastScrollTime(now);
-
-        if (direction === "down" && currentIndex < ROUTES.length - 1) {
-          setIsNavigating(true);
-          router.push(ROUTES[currentIndex + 1]);
-          setTimeout(() => setIsNavigating(false), 1000);
-        } else if (direction === "up" && currentIndex > 0) {
-          setIsNavigating(true);
-          router.push(ROUTES[currentIndex - 1]);
-          setTimeout(() => setIsNavigating(false), 1000);
-        }
-      }
-    };
-
-    const handleTouchStart = (e) => {
-      setTouchStartY(e.touches[0].clientY);
-    };
-
-    const handleTouchMove = (e) => {
-      if (touchStartY === null) return;
-      const touchY = e.touches[0].clientY;
-      const touchDiff = touchY - touchStartY;
-      const { scrollTop, scrollHeight, clientHeight } =
-        document.documentElement;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-      const atTop = scrollTop <= 10;
-
-      if ((atBottom && touchDiff > 0) || (atTop && touchDiff < 0)) {
-        e.preventDefault();
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      if (touchStartY === null) return;
-
-      const touchEndY = e.changedTouches[0].clientY;
-      const touchDiff = touchEndY - touchStartY;
-
-      if (Math.abs(touchDiff) < 100) {
-        setTouchStartY(null);
-        return;
-      }
-      const now = Date.now();
-      if (now - lastScrollTime < 1000 || isNavigating) {
-        setTouchStartY(null);
+      if (
+        !isAtScrollBoundary(direction, {
+          scrollTop: document.documentElement.scrollTop,
+          scrollHeight: document.documentElement.scrollHeight,
+          clientHeight: document.documentElement.clientHeight,
+        })
+      ) {
         return;
       }
 
-      const currentIndex = ROUTES.indexOf(pathname);
-      if (currentIndex === -1) {
-        setTouchStartY(null);
-        return;
-      }
-
-      const { scrollTop, scrollHeight, clientHeight } =
-        document.documentElement;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 10;
-      const atTop = scrollTop <= 10;
-
-      if (touchDiff < 0 && atBottom) {
-        if (currentIndex < ROUTES.length - 1) {
-          setLastScrollTime(now);
-          setIsNavigating(true);
-          router.push(ROUTES[currentIndex + 1]);
-          setTimeout(() => setIsNavigating(false), 1000);
-        }
-      } else if (touchDiff > 0 && atTop) {
-        if (currentIndex > 0) {
-          setLastScrollTime(now);
-          setIsNavigating(true);
-          router.push(ROUTES[currentIndex - 1]);
-          setTimeout(() => setIsNavigating(false), 1000);
-        }
-      }
-
-      setTouchStartY(null);
+      attemptNavigation(direction);
     };
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    if (!isMobile) {
-      window.addEventListener("touchstart", handleTouchStart, {
-        passive: true,
-      });
-      window.addEventListener("touchmove", handleTouchMove, { passive: false });
-      window.addEventListener("touchend", handleTouchEnd, { passive: true });
-    }
+    window.addEventListener("wheel", handleWheel, { passive: true });
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
-      if (!isMobile) {
-        window.removeEventListener("touchstart", handleTouchStart);
-        window.removeEventListener("touchmove", handleTouchMove);
-        window.removeEventListener("touchend", handleTouchEnd);
-      }
-
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
-  }, [pathname, router, lastScrollTime, isNavigating, touchStartY, isMobile]);
+  }, [isEnabled, pathname]);
 
-  const navigateToNextPage = () => {
-    const currentIndex = ROUTES.indexOf(pathname);
-    if (currentIndex < ROUTES.length - 1) {
-      router.push(ROUTES[currentIndex + 1]);
-    }
+  return {
+    isEnabled,
+    canNavigateForward: Boolean(getAdjacentRoute(pathname, "down")),
+    canNavigateBackward: Boolean(getAdjacentRoute(pathname, "up")),
+    navigateToNextPage: () => attemptNavigation("down"),
+    navigateToPrevPage: () => attemptNavigation("up"),
   };
-
-  const navigateToPrevPage = () => {
-    const currentIndex = ROUTES.indexOf(pathname);
-    if (currentIndex > 0) {
-      router.push(ROUTES[currentIndex - 1]);
-    }
-  };
-
-  return { navigateToNextPage, navigateToPrevPage, isMobile };
-};
+}

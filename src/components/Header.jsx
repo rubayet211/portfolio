@@ -1,33 +1,25 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image"; // Added Image import
-import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { navigationItems, siteContent } from "@/content/site";
+
+const primaryNavigation = navigationItems.filter((item) => item.href !== "/contact");
 
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  const isActive = (path) => pathname === path;
-
-  const menuItems = [
-    { title: "Home", path: "/" },
-    { title: "About", path: "/about" },
-    { title: "Skill", path: "/skill" },
-    { title: "Projects", path: "/projects" },
-  ];
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   useEffect(() => {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 10);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -35,83 +27,107 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
   return (
     <header
-      className={`fixed w-full top-0 z-50 py-4 px-8 transition-all duration-300 ${
-        hasScrolled
-          ? "bg-background/80 backdrop-blur-lg shadow-md"
-          : "bg-transparent"
+      className={`header-shell fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        hasScrolled ? "border-white/10 bg-[#090c10]/[0.84] shadow-2xl backdrop-blur-xl" : "border-transparent bg-transparent"
       }`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center justify-between w-full md:hidden">
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="Logo" width={40} height={40} />
+      <div className="container-shell">
+        <div className="flex items-center justify-between gap-4 px-1 py-4 sm:px-2">
+          <Link href="/" className="inline-flex items-center gap-3 rounded-full pr-3 transition hover:opacity-100">
+            <Image
+              src="/logo.png"
+              alt={`${siteContent.person.name} logo`}
+              width={44}
+              height={44}
+              className="rounded-full border border-white/10 bg-white/[0.03]"
+            />
+            <div className="hidden sm:block">
+              <p className="text-sm font-semibold tracking-wide text-white">{siteContent.person.name}</p>
+              <p className="text-xs text-white/[0.55]">{siteContent.person.role}</p>
+            </div>
           </Link>
-          <button
-            onClick={toggleMenu}
-            className="text-white focus:outline-none z-50 p-2 -mr-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
-        </div>
-        <nav className="hidden md:flex items-center justify-between flex-1">
-          <div className="mx-6">
-            <Link href="/">
-              <Image src="/logo.png" alt="Logo" width={40} height={40} />
-            </Link>
-          </div>
-          <div className="flex items-center space-x-6">
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`menu-item ${isActive(item.path) ? "active" : ""}`}
-              >
-                {item.title}
-              </Link>
-            ))}
-          </div>
-          <Link
-            href="/contact"
-            className="relative z-10 px-5 py-2 font-light transition-colors cutout-button"
-          >
-            Contact
-          </Link>
-        </nav>
-        <div
-          className={`fixed inset-0 bg-background/95 backdrop-blur-md transition-all duration-300 ease-in-out md:hidden ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } z-[60] flex items-center justify-center`}
-        >
-          <nav className="flex flex-col items-center space-y-6">
-            <Link href="/" onClick={() => setIsMenuOpen(false)}>
-              <Image src="/logo.png" alt="Logo" width={50} height={50} />
-            </Link>
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                onClick={() => setIsMenuOpen(false)}
-                className={`text-xl menu-item ${
-                  isActive(item.path) ? "active" : ""
-                }`}
-              >
-                {item.title}
-              </Link>
-            ))}
-            <Link
-              href="/contact"
-              className="text-xl menu-item"
-              onClick={() => setIsMenuOpen(false)}
-            >
+
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+            {primaryNavigation.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Link key={item.href} href={item.href} className={`nav-link ${isActive ? "active" : ""}`}>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden items-center gap-3 lg:flex">
+            <a href={siteContent.person.resumePath} download className="secondary-button">
+              Download CV
+            </a>
+            <Link href="/contact" className="primary-button">
               Contact
             </Link>
+          </div>
+
+          <button
+            type="button"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white transition hover:bg-white/[0.08] lg:hidden"
+            onClick={() => setIsMenuOpen((current) => !current)}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
+
+      <div
+        className={`lg:hidden ${isMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition duration-300`}
+      >
+        <div className="fixed inset-0 top-[5.5rem] bg-black/55 backdrop-blur-sm" />
+        <div
+          id="mobile-navigation"
+          className={`fixed inset-x-4 top-[5.9rem] rounded-[2rem] border border-white/10 bg-[#0d1218]/[0.96] p-6 shadow-2xl backdrop-blur-xl transition duration-300 ${
+            isMenuOpen ? "translate-y-0" : "-translate-y-4"
+          }`}
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)]">
+            Navigation
+          </p>
+          <p className="mt-3 max-w-md text-sm leading-7 text-white/[0.65]">{siteContent.person.availability}</p>
+
+          <nav className="mt-6 flex flex-col gap-2" aria-label="Mobile">
+            {navigationItems.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`rounded-2xl border px-4 py-4 text-base font-medium transition ${
+                    isActive
+                      ? "border-[var(--color-accent-soft)] bg-white/[0.07] text-white"
+                      : "border-white/[0.08] bg-white/[0.03] text-white/[0.78] hover:bg-white/[0.06]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       </div>
