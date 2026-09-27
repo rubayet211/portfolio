@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Github, Linkedin, Twitter } from "lucide-react";
 import { navigationItems, siteContent } from "@/content/site";
+import ResumeLink from "@/components/ResumeLink";
 
 const socialIcons = {
   GitHub: Github,
@@ -60,9 +61,9 @@ export default function Footer() {
                 );
               })}
             </div>
-            <a href={siteContent.person.resumePath} download className="mt-4 inline-flex min-h-11 items-center text-sm text-muted hover:text-foreground">
-              Download résumé
-            </a>
+            <ResumeLink className="mt-4 inline-flex min-h-11 items-center border-0 bg-transparent text-left text-sm text-muted hover:text-foreground">
+              Résumé
+            </ResumeLink>
             <p className="mt-2 text-sm leading-6 text-muted">{siteContent.person.availability}</p>
           </div>
         </div>

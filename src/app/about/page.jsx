@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ExperienceList from "@/components/ExperienceList";
+import ResumeLink from "@/components/ResumeLink";
 import { siteContent } from "@/content/site";
 import { buildPageMetadata } from "@/lib/metadata";
 
@@ -33,9 +34,7 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
-            <a href={siteContent.person.resumePath} download className="secondary-button mt-8">
-              Download résumé
-            </a>
+            <ResumeLink className="secondary-button mt-8">Résumé</ResumeLink>
           </div>
 
           <figure className="lg:pt-14">

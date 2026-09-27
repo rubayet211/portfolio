@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { navigationItems, siteContent } from "@/content/site";
+import ResumeLink from "@/components/ResumeLink";
 
 const primaryNavigation = navigationItems.filter((item) => item.href !== "/contact");
 
@@ -92,9 +93,7 @@ export default function Header() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <a href={siteContent.person.resumePath} download className="secondary-button">
-              Résumé
-            </a>
+            <ResumeLink className="secondary-button">Résumé</ResumeLink>
             <Link href="/contact" className="primary-button">
               Contact
             </Link>
@@ -130,9 +129,9 @@ export default function Header() {
                 </Link>
               );
             })}
-            <a href={siteContent.person.resumePath} download className="px-1 py-4 text-base text-foreground">
-              Download résumé
-            </a>
+            <ResumeLink className="border-0 bg-transparent px-1 py-4 text-left text-base text-foreground">
+              Résumé
+            </ResumeLink>
           </nav>
         </div>
       ) : null}

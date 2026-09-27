@@ -9,6 +9,7 @@ import {
   getContactSubmissionState,
   validateContactForm,
 } from "@/lib/contactForm";
+import ResumeLink from "@/components/ResumeLink";
 import { siteContent } from "@/content/site";
 
 const fieldNames = ["from_name", "from_email", "subject", "message"];
@@ -214,15 +215,13 @@ export default function ContactForm() {
           <div className="rounded-lg border border-line bg-background p-5">
             <p className="text-sm font-semibold text-white">Prefer a quick review first?</p>
             <p className="mt-2 text-sm leading-7 text-white/70">
-              Browse recent work or download my CV before reaching out.
+              Browse recent work or read my résumé before reaching out.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link href="/projects" className="secondary-button">
                 View projects
               </Link>
-              <a href={siteContent.person.resumePath} download className="secondary-button">
-                Download CV
-              </a>
+              <ResumeLink className="secondary-button">Résumé</ResumeLink>
             </div>
           </div>
         </div>

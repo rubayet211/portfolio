@@ -2,6 +2,7 @@ import Link from "next/link";
 import FeaturedProject from "@/components/FeaturedProject";
 import ExperienceList from "@/components/ExperienceList";
 import SectionHeading from "@/components/SectionHeading";
+import ResumeLink from "@/components/ResumeLink";
 import { siteContent } from "@/content/site";
 
 const rangeLabels = [
@@ -33,9 +34,7 @@ export default function HomePage() {
               <Link href={siteContent.hero.secondaryCta.href} className="secondary-button">
                 {siteContent.hero.secondaryCta.label}
               </Link>
-              <a href={siteContent.person.resumePath} download className="secondary-button">
-                Download résumé
-              </a>
+              <ResumeLink className="secondary-button">Résumé</ResumeLink>
             </div>
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
               {siteContent.socialLinks.map((link) => (
