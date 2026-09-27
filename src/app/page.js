@@ -1,119 +1,142 @@
 import Link from "next/link";
-import { ArrowRight, BriefcaseBusiness, Layers3, MessageSquareText } from "lucide-react";
+import FeaturedProject from "@/components/FeaturedProject";
+import ExperienceList from "@/components/ExperienceList";
+import SectionHeading from "@/components/SectionHeading";
 import { siteContent } from "@/content/site";
+
+const rangeLabels = [
+  "Production platforms",
+  "Full-stack systems",
+  "AI workflows",
+  "Browser extensions",
+  "Commerce integrations",
+];
 
 export default function HomePage() {
   const featuredProjects = siteContent.projects.filter((project) => project.featured);
-  const serviceIcons = [Layers3, BriefcaseBusiness, MessageSquareText];
 
   return (
     <div className="page-shell">
       <div className="container-shell">
-        <section className="hero-panel page-reveal overflow-hidden px-6 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(232,190,118,0.14),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(42,92,128,0.18),transparent_32%)]" />
-          <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-            <div className="max-w-3xl">
-              <span className="eyebrow">{siteContent.hero.eyebrow}</span>
-              <h1 className="section-title mt-5 max-w-4xl text-left text-5xl sm:text-6xl lg:text-7xl xl:text-[5.4rem]">
-                {siteContent.hero.title}
-              </h1>
-              <p className="section-copy mt-6 max-w-2xl text-base sm:text-lg">
-                {siteContent.hero.description}
-              </p>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href={siteContent.hero.primaryCta.href} className="primary-button">
-                  {siteContent.hero.primaryCta.label}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href={siteContent.hero.secondaryCta.href} className="secondary-button">
-                  {siteContent.hero.secondaryCta.label}
-                </Link>
-              </div>
+        <section className="grid gap-10 border-b border-line pb-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:items-end">
+          <div className="max-w-3xl">
+            <p className="eyebrow">{siteContent.hero.eyebrow}</p>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+              {siteContent.hero.title}
+            </h1>
+            <p className="mt-4 text-xl font-medium text-foreground sm:text-2xl">{siteContent.hero.role}</p>
+            <p className="section-copy mt-5 max-w-2xl">{siteContent.hero.description}</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href={siteContent.hero.primaryCta.href} className="primary-button">
+                {siteContent.hero.primaryCta.label}
+              </Link>
+              <Link href={siteContent.hero.secondaryCta.href} className="secondary-button">
+                {siteContent.hero.secondaryCta.label}
+              </Link>
+              <a href={siteContent.person.resumePath} download className="secondary-button">
+                Download résumé
+              </a>
             </div>
-
-            <div className="grid gap-4">
-              {siteContent.hero.highlights.map((highlight) => (
-                <div key={highlight.label} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-                  <p className="text-sm font-semibold text-white">{highlight.label}</p>
-                  <p className="mt-2 text-sm leading-7 text-white/70">{highlight.value}</p>
-                </div>
+            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              {siteContent.socialLinks.map((link) => (
+                <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-foreground">
+                  {link.label}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
               ))}
             </div>
+            <a href={`mailto:${siteContent.person.email}`} className="mt-3 inline-flex break-all text-sm text-muted hover:text-foreground">
+              {siteContent.person.email}
+            </a>
+          </div>
+
+          <dl className="grid gap-4 border-t border-line pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            {siteContent.hero.facts.map((fact) => (
+              <div key={fact.label}>
+                <dt className="eyebrow">{fact.label}</dt>
+                <dd className="mt-2 text-sm leading-6 text-foreground">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <ul className="grid border-b border-line sm:grid-cols-2 lg:grid-cols-5" aria-label="Range">
+          {rangeLabels.map((label) => (
+            <li key={label} className="border-b border-line px-1 py-4 text-sm text-foreground sm:border-b-0 sm:px-4 sm:first:pl-0">
+              {label}
+            </li>
+          ))}
+        </ul>
+
+        <section id="work" className="pt-16">
+          <SectionHeading eyebrow="Selected work" title="Four systems, four different jobs.">
+            The first screen of each project is a current capture of the live deployment. Private repositories stay private.
+          </SectionHeading>
+          <div className="mt-8">
+            {featuredProjects.map((project, index) => (
+              <FeaturedProject key={project.id} project={project} reverse={index % 2 === 1} priority={index === 0} />
+            ))}
+          </div>
+          <div className="border-t border-line pt-6">
+            <Link href="/projects" className="text-sm font-semibold text-accent hover:text-foreground">
+              All projects, including commerce and the extension
+            </Link>
           </div>
         </section>
 
-        <section className="mt-10 grid gap-6 lg:grid-cols-3">
-          {siteContent.home.services.map((service, index) => {
-            const Icon = serviceIcons[index];
-
-            return (
-              <article key={service.title} className="surface-card page-reveal p-6 sm:p-7">
-                <span className="inline-flex rounded-full border border-white/10 bg-white/[0.05] p-3 text-[var(--color-accent)]">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <h2 className="mt-5 text-2xl font-semibold text-white">{service.title}</h2>
-                <p className="mt-3 text-sm leading-7 text-white/70">{service.description}</p>
+        <section id="capabilities" className="mt-20 border-t border-line pt-16">
+          <SectionHeading eyebrow="Engineering" title="What the work actually required." />
+          <div className="mt-10 grid gap-10 md:grid-cols-2">
+            {siteContent.capabilities.map((capability) => (
+              <article key={capability.title}>
+                <h3 className="text-xl font-semibold text-foreground">{capability.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-muted">{capability.description}</p>
               </article>
-            );
-          })}
+            ))}
+          </div>
         </section>
 
-        <section className="mt-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <article className="surface-card p-6 sm:p-8">
-            <span className="eyebrow">Snapshot</span>
-            <h2 className="section-title mt-4 text-left text-4xl">What working together feels like</h2>
-            <div className="mt-6 space-y-4">
-              {siteContent.home.credibilityNotes.map((note) => (
-                <div key={note} className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-sm leading-7 text-white/[0.72]">
-                  {note}
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {siteContent.home.featuredSkillTags.map((tag) => (
-                <span key={tag} className="tag-chip">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </article>
+        <section className="mt-20 border-t border-line pt-16">
+          <SectionHeading eyebrow="Experience" title="ComboKid, since March 2024.">
+            Remote product work for a Hong Kong-based team. I have not added metrics I cannot verify.
+          </SectionHeading>
+          <div className="mt-8">
+            <ExperienceList />
+          </div>
+        </section>
 
-          <article className="surface-card p-6 sm:p-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <span className="eyebrow">Featured work</span>
-                <h2 className="section-title mt-4 text-left text-4xl">Selected projects</h2>
-              </div>
-              <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[var(--color-accent)] transition hover:text-white">
-                See the full project list
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+        <section id="stack" className="mt-20 border-t border-line pt-16">
+          <SectionHeading eyebrow="Stack" title="Tools I use on production work." />
+          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {siteContent.stack.map((group) => (
+              <article key={group.title}>
+                <h3 className="text-lg font-semibold text-foreground">{group.title}</h3>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <li key={item} className="tag-chip">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+          <p className="mt-8 max-w-3xl text-sm leading-7 text-muted">{siteContent.stackNote}</p>
+        </section>
 
-            <div className="mt-8 grid gap-4">
-              {featuredProjects.map((project) => (
-                <div
-                  key={project.id}
-                  className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 transition hover:border-[var(--color-accent-soft)] hover:bg-white/[0.05]"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="tag-chip">{project.type}</span>
-                    <span className="tag-chip">{project.status}</span>
-                  </div>
-                  <h3 className="mt-4 text-2xl font-semibold text-white">{project.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-white/70">{project.summary}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {project.stack.map((item) => (
-                      <span key={item} className="tag-chip">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </article>
+        <section className="mt-20 border-t border-line pt-16">
+          <h2 className="max-w-xl text-4xl font-semibold tracking-tight text-foreground">Have a product that needs to ship?</h2>
+          <p className="section-copy mt-4 max-w-xl">
+            If you need the interface, the data, and the operational path built as one piece of work, start with an email or the contact form.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/contact" className="primary-button">
+              Contact me
+            </Link>
+            <a href={`mailto:${siteContent.person.email}`} className="secondary-button">
+              {siteContent.person.email}
+            </a>
+          </div>
         </section>
       </div>
     </div>

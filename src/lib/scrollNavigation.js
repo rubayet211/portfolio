@@ -1,4 +1,4 @@
-export const SCROLL_ROUTE_ORDER = ["/", "/about", "/skill", "/projects", "/contact"];
+export const SCROLL_ROUTE_ORDER = ["/", "/projects", "/about", "/contact"];
 
 export function getRouteIndex(pathname) {
   return SCROLL_ROUTE_ORDER.indexOf(pathname);

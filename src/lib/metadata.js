@@ -40,7 +40,9 @@ export function buildPageMetadata({ title, description, path = "/" }) {
       images: [
         {
           url: imageUrl,
-          alt: `${siteContent.person.name} profile image`,
+          width: 1200,
+          height: 630,
+          alt: "Rhyme Rubayet, full-stack product engineer",
         },
       ],
     },

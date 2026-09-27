@@ -11,11 +11,11 @@ export default function ScrollArrow() {
   }
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 hidden justify-center lg:flex">
+    <div className="pointer-events-none fixed bottom-6 right-6 z-40 hidden lg:flex">
       <button
         type="button"
         onClick={navigateToNextPage}
-        className="scroll-arrow-button motion-safe-bounce pointer-events-auto"
+        className="scroll-arrow-button pointer-events-auto"
         aria-label="Go to the next page"
       >
         <ArrowDown className="h-5 w-5" />

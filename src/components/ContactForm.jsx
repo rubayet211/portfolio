@@ -159,7 +159,7 @@ export default function ContactForm() {
         </div>
 
         <div className="mt-8 grid gap-4">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="rounded-lg border border-line bg-background p-5">
             <div className="flex items-start gap-3">
               <span className="rounded-full border border-white/10 bg-white/[0.04] p-3 text-[var(--color-accent)]">
                 <Mail className="h-5 w-5" />
@@ -201,7 +201,7 @@ export default function ContactForm() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="rounded-lg border border-line bg-background p-5">
             <p className="text-sm font-semibold text-white">Availability</p>
             <p className="mt-2 text-sm leading-7 text-white/70">
               {siteContent.contact.availabilityCard}
@@ -211,7 +211,7 @@ export default function ContactForm() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="rounded-lg border border-line bg-background p-5">
             <p className="text-sm font-semibold text-white">Prefer a quick review first?</p>
             <p className="mt-2 text-sm leading-7 text-white/70">
               Browse recent work or download my CV before reaching out.
@@ -262,7 +262,7 @@ export default function ContactForm() {
                 value={values.from_name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="John Doe"
+                placeholder="Your name"
                 aria-invalid={Boolean(errors.from_name)}
                 aria-describedby={errors.from_name ? "from_name-error" : undefined}
                 className={`field-input ${errors.from_name ? "field-input-error" : ""}`}

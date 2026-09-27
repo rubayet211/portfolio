@@ -16,11 +16,11 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setHasScrolled(window.scrollY > 10);
+      setHasScrolled(window.scrollY > 8);
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -39,34 +39,52 @@ export default function Header() {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return undefined;
+    }
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isMenuOpen]);
+
   return (
     <header
-      className={`header-shell fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        hasScrolled ? "border-white/10 bg-[#090c10]/[0.84] shadow-2xl backdrop-blur-xl" : "border-transparent bg-transparent"
+      className={`header-shell fixed inset-x-0 top-0 z-50 ${
+        hasScrolled ? "border-line bg-background" : "border-transparent bg-background/80"
       }`}
     >
       <div className="container-shell">
-        <div className="flex items-center justify-between gap-4 px-1 py-4 sm:px-2">
-          <Link href="/" className="inline-flex items-center gap-3 rounded-full pr-3 transition hover:opacity-100">
+        <div className="flex items-center justify-between gap-4 px-1 py-3 sm:px-0">
+          <Link href="/" className="inline-flex min-h-11 items-center gap-3">
             <Image
               src="/logo.png"
-              alt={`${siteContent.person.name} logo`}
-              width={44}
-              height={44}
-              className="rounded-full border border-white/10 bg-white/[0.03]"
+              alt=""
+              width={36}
+              height={36}
+              className="rounded-sm border border-line"
             />
-            <div className="hidden sm:block">
-              <p className="text-sm font-semibold tracking-wide text-white">{siteContent.person.name}</p>
-              <p className="text-xs text-white/[0.55]">{siteContent.person.role}</p>
-            </div>
+            <span className="leading-tight">
+              <span className="block text-sm font-semibold text-foreground">{siteContent.person.name}</span>
+              <span className="hidden text-xs text-muted sm:block">{siteContent.person.role}</span>
+            </span>
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
             {primaryNavigation.map((item) => {
               const isActive = pathname === item.href;
 
               return (
-                <Link key={item.href} href={item.href} className={`nav-link ${isActive ? "active" : ""}`}>
+                <Link key={item.href} href={item.href} className={`nav-link ${isActive ? "active" : ""}`} aria-current={isActive ? "page" : undefined}>
                   {item.label}
                 </Link>
               );
@@ -75,7 +93,7 @@ export default function Header() {
 
           <div className="hidden items-center gap-3 lg:flex">
             <a href={siteContent.person.resumePath} download className="secondary-button">
-              Download CV
+              Résumé
             </a>
             <Link href="/contact" className="primary-button">
               Contact
@@ -84,7 +102,7 @@ export default function Header() {
 
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white transition hover:bg-white/[0.08] lg:hidden"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center border border-line text-foreground lg:hidden"
             onClick={() => setIsMenuOpen((current) => !current)}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-navigation"
@@ -95,22 +113,9 @@ export default function Header() {
         </div>
       </div>
 
-      <div
-        className={`lg:hidden ${isMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"} transition duration-300`}
-      >
-        <div className="fixed inset-0 top-[5.5rem] bg-black/55 backdrop-blur-sm" />
-        <div
-          id="mobile-navigation"
-          className={`fixed inset-x-4 top-[5.9rem] rounded-[2rem] border border-white/10 bg-[#0d1218]/[0.96] p-6 shadow-2xl backdrop-blur-xl transition duration-300 ${
-            isMenuOpen ? "translate-y-0" : "-translate-y-4"
-          }`}
-        >
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)]">
-            Navigation
-          </p>
-          <p className="mt-3 max-w-md text-sm leading-7 text-white/[0.65]">{siteContent.person.availability}</p>
-
-          <nav className="mt-6 flex flex-col gap-2" aria-label="Mobile">
+      {isMenuOpen ? (
+        <div id="mobile-navigation" className="border-t border-line bg-background lg:hidden">
+          <nav className="container-shell flex flex-col px-1 py-3" aria-label="Mobile">
             {navigationItems.map((item) => {
               const isActive = pathname === item.href;
 
@@ -118,19 +123,19 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-2xl border px-4 py-4 text-base font-medium transition ${
-                    isActive
-                      ? "border-[var(--color-accent-soft)] bg-white/[0.07] text-white"
-                      : "border-white/[0.08] bg-white/[0.03] text-white/[0.78] hover:bg-white/[0.06]"
-                  }`}
+                  className={`border-b border-line px-1 py-4 text-base ${isActive ? "text-foreground" : "text-muted"}`}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {item.label}
                 </Link>
               );
             })}
+            <a href={siteContent.person.resumePath} download className="px-1 py-4 text-base text-foreground">
+              Download résumé
+            </a>
           </nav>
         </div>
-      </div>
+      ) : null}
     </header>
   );
 }

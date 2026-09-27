@@ -1,26 +1,56 @@
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./clientLayout";
 import { siteContent } from "@/content/site";
 import { getSiteUrl } from "@/lib/metadata";
 
-const sans = Manrope({
+const sans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-  fallback: ["system-ui", "sans-serif"],
-});
-
-const serif = Cormorant_Garamond({
-  subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-ibm-sans",
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  variable: "--font-ibm-mono",
+  display: "swap",
+  weight: ["400", "500"],
+});
+
 const siteUrl = getSiteUrl();
 const ogImageUrl = new URL(siteContent.seo.ogImage, siteUrl).toString();
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: siteContent.person.name,
+  jobTitle: siteContent.person.role,
+  email: siteContent.person.email,
+  url: siteUrl.toString(),
+  image: new URL("/profile.png", siteUrl).toString(),
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Dhaka",
+    addressCountry: "Bangladesh",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "American International University-Bangladesh",
+  },
+  worksFor: {
+    "@type": "Organization",
+    name: siteContent.person.currentCompany,
+  },
+  sameAs: siteContent.socialLinks.map((link) => link.href),
+  knowsAbout: [
+    "Full-stack product engineering",
+    "SvelteKit",
+    "Next.js",
+    "E-commerce integrations",
+    "AI workflow development",
+  ],
+};
 
 export const metadata = {
   metadataBase: siteUrl,
@@ -43,7 +73,9 @@ export const metadata = {
     images: [
       {
         url: ogImageUrl,
-        alt: `${siteContent.person.name} profile image`,
+        width: 1200,
+        height: 630,
+        alt: "Rhyme Rubayet, full-stack product engineer",
       },
     ],
   },
@@ -67,18 +99,15 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#090c10",
+  themeColor: "#101214",
   colorScheme: "dark",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${sans.variable} ${serif.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

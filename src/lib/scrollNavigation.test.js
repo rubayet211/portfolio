@@ -9,13 +9,13 @@ import {
 
 describe("scroll navigation helpers", () => {
   it("knows the ordered routes", () => {
-    expect(SCROLL_ROUTE_ORDER).toEqual(["/", "/about", "/skill", "/projects", "/contact"]);
-    expect(getRouteIndex("/projects")).toBe(3);
+    expect(SCROLL_ROUTE_ORDER).toEqual(["/", "/projects", "/about", "/contact"]);
+    expect(getRouteIndex("/projects")).toBe(1);
   });
 
   it("finds adjacent routes", () => {
-    expect(getAdjacentRoute("/", "down")).toBe("/about");
-    expect(getAdjacentRoute("/about", "up")).toBe("/");
+    expect(getAdjacentRoute("/", "down")).toBe("/projects");
+    expect(getAdjacentRoute("/about", "up")).toBe("/projects");
     expect(getAdjacentRoute("/contact", "down")).toBeNull();
   });
 
