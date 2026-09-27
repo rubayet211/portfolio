@@ -261,6 +261,10 @@ h4 {
   .page-reveal {
     animation: rise-in 0.45s ease both;
   }
+
+  .motion-safe-bounce {
+    animation: bounce-soft 1.6s ease-in-out infinite;
+  }
 }
 
 @keyframes rise-in {
@@ -272,6 +276,17 @@ h4 {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(8px);
   }
 }
 
@@ -293,7 +308,8 @@ h4 {
     scroll-behavior: auto;
   }
 
-  .page-reveal {
+  .page-reveal,
+  .motion-safe-bounce {
     animation: none;
   }
 
